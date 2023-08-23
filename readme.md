@@ -4,12 +4,30 @@
 
 ## Initialization
 
-1. Install node.js version 18.17.1
-2. Install npm version 9.8.1
+1. Install project by running command below
+
+```
+npm install
+```
+
+2. Copy `.env.dist` file into `.env` file e.g. by using command below
+
+```
+cp .env.dist .env
+```
 
 ## How to use
 
 Application is developed in docker environment.
 
-1. To start development environment run `npm run d-dev`
-2. To start integration tests run `npm run d-test-integrations`
+1. To start development environment run
+
+```
+npm run d-dev
+```
+
+2. To start integration tests run
+
+```
+npm run d-test-integrations
+```

@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "18.17.1",
-    "npm": "9.8.1"
-  },
   "scripts": {
     "start": "node -r source-map-support/register ./dist/index.js",
     "build": "tsc --build",

@@ -28,8 +28,6 @@ services:
     ports:
       - "3256:3256"
     depends_on:
-      redis:
-        condition: service_started
       postgres:
         condition: service_healthy
       adminer:
@@ -69,13 +67,6 @@ services:
       - postgres
     ports:
       - 8080:8080
-    networks:
-      - app
-  redis:
-    container_name: redis
-    image: "redis"
-    ports:
-      - "6379:6379"
     networks:
       - app
   js:
