@@ -1,0 +1,105 @@
+version: "3.9"
+
+volumes:
+  postgres_storage:
+    driver: local
+
+networks:
+  app:
+
+services:
+  app:
+    container_name: app
+    image: app:local
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app/
+    command: npm run dev
+    environment:
+      NODE_STAGE: ${NODE_STAGE}
+      PORT: ${PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+    ports:
+      - "3256:3256"
+    depends_on:
+      redis:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      adminer:
+        condition: service_started
+    healthcheck:
+      test: "apk add curl && curl http://localhost:3256/"
+      retries: 20
+      interval: 3s
+      timeout: 5s
+      start_period: 5s
+    networks:
+      - app
+  postgres:
+    container_name: postgres
+    image: "postgres:13"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      TZ: "Europe/Warsaw"
+    healthcheck:
+      test: 'pg_isready --username=postgres && psql --username=postgres -c "SELECT * FROM postgres.pg_catalog.pg_database;"'
+      retries: 20
+      interval: 3s
+      timeout: 5s
+      start_period: 5s
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_init.sql:/docker-entrypoint-initdb.d/db_init.sql:ro
+    networks:
+      - app
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+    networks:
+      - app
+  redis:
+    container_name: redis
+    image: "redis"
+    ports:
+      - "6379:6379"
+    networks:
+      - app
+  js:
+    image: app:local
+    container_name: js
+    hostname: js
+    volumes:
+      - .:/app
+    ports:
+      - 5545:5545
+    env_file:
+      - .env
+    environment:
+      NODE_STAGE: ${NODE_STAGE}
+      PORT: ${PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+    networks:
+      - app
+    depends_on:
+      app:
+        condition: service_healthy
+    links:
+      - app

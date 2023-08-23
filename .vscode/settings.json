@@ -1,0 +1,29 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "eslint.options": {
+        "overrideConfigFile": "./eslint.json"
+    },
+    "typescript.validate.enable": true,
+    "explorer.excludeGitIgnore": false,
+    "typescript.format.enable": false,
+    "cSpell.words": [],
+    "files.exclude": {
+        "**/.dynamodb": false,
+        "**/.step-functions-local": false,
+        "**/.vscode": false,
+        "**/.webpack": false,
+        "**/coverage": false,
+        "**/node_modules": false,
+        "**/.husky": false,
+        "**/.gitignore": false,
+        "**/.prettierrc": false,
+        "**/.travis.yml": false,
+        "**/commitlint.config.js": false,
+        "**/eslint.json": false,
+        "**/package-lock.json": false,
+        "**/tsconfig.json": false,
+        "**/webpack.config.js": false,
+        "**/.editorconfig": false,
+        "**/jest.config.json": false
+    }
+}
